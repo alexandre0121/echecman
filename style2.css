@@ -1,10 +1,23 @@
 /* ===== STYLES GÉNÉRAUX ===== */
-body {
-  background-color: white;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background-color: white;
   font-family: sans-serif;
-  text-align: center;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;  /* Centre verticalement tout le contenu */
+  min-height: 100vh;
+  padding: 20px;
 }
 
 /* ===== EN-TÊTE ===== */
@@ -12,9 +25,12 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  max-width: 900px;
   padding: 15px 30px;
   background-color: #f5f0eb;
   border-bottom: 2px solid #ddd;
+  border-radius: 10px 10px 0 0;
 }
 
 header a {
@@ -44,17 +60,21 @@ header a:hover {
   background-color: #333;
 }
 
-/* ===== CONTENU PRINCIPAL ===== */
+/* ===== CONTENU PRINCIPAL - CENTRÉ ===== */
 .left {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 0 20px;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 30px;
   text-align: center;
+  background-color: white;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .left h1 {
   font-size: 2.2rem;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .left p {
@@ -66,6 +86,7 @@ header a:hover {
 .left .intro-liste {
   font-size: 1.3rem;
   margin-top: 30px;
+  margin-bottom: 15px;
 }
 
 .left ul {
@@ -77,19 +98,23 @@ header a:hover {
 .left ul li {
   font-size: 1.05rem;
   line-height: 1.8;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   text-align: center;
 }
 
+/* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
   header {
     flex-direction: column;
     gap: 10px;
-    padding: 10px;
+    padding: 15px;
   }
   .noir {
     width: 80%;
     max-width: 200px;
+  }
+  .left {
+    padding: 20px 15px;
   }
   .left h1 {
     font-size: 1.6rem;
