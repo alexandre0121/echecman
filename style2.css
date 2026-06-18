@@ -1,4 +1,4 @@
-/* ===== TOUT CENTRÉ ===== */
+/* ===== PAGE ENTIÈRE CENTRÉE ===== */
 * {
   margin: 0;
   padding: 0;
@@ -7,26 +7,18 @@
 
 html, body {
   height: 100%;
-  background-color: #f0f0f0;
+  background-color: white; /* ou la couleur que vous voulez */
   font-family: sans-serif;
 }
 
 body {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;    /* Centre verticalement */
+  align-items: center;        /* Centre horizontalement */
   min-height: 100vh;
   padding: 20px;
-}
-
-/* ===== CONTENEUR PRINCIPAL ===== */
-.container {
-  max-width: 900px;
-  width: 100%;
-  background-color: white;
-  border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
+  text-align: center;         /* Centre le texte */
 }
 
 /* ===== EN-TÊTE ===== */
@@ -34,9 +26,10 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 30px;
-  background-color: #f5f0eb;
-  border-bottom: 2px solid #ddd;
+  width: 100%;
+  max-width: 900px;
+  padding: 15px 0;
+  margin-bottom: 30px;
 }
 
 header a {
@@ -66,60 +59,52 @@ header a:hover {
   background-color: #333;
 }
 
-/* ===== CONTENU ===== */
-.left {
-  padding: 40px 40px 50px;
-  text-align: center;
+/* ===== CONTENU TEXTE CENTRÉ ===== */
+.content {
+  max-width: 800px;
+  width: 100%;
+  padding: 0 20px;
 }
 
-.left h1 {
+.content h1 {
   font-size: 2.2rem;
   margin-bottom: 20px;
 }
 
-.left p {
+.content p {
   font-size: 1.1rem;
   line-height: 1.8;
   margin: 15px 0;
 }
 
-.left .intro-liste {
+.content .intro-liste {
   font-size: 1.3rem;
   margin-top: 30px;
   margin-bottom: 15px;
 }
 
-.left ul {
+.content ul {
   list-style-position: inside;
   padding: 0;
-  text-align: center;
 }
 
-.left ul li {
+.content ul li {
   font-size: 1.05rem;
   line-height: 1.8;
   margin-bottom: 8px;
-  text-align: center;
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
   header {
     flex-direction: column;
     gap: 10px;
-    padding: 15px;
   }
   .noir {
     width: 80%;
     max-width: 200px;
   }
-  .left {
-    padding: 20px;
-  }
-  .left h1 {
+  .content h1 {
     font-size: 1.6rem;
   }
 }
