@@ -4,20 +4,20 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  text-align: center; /* Centre tout le texte */
+  text-align: center;
 }
 
-/* ===== EN-TÊTE ===== */
+/* ===== EN-TÊTE avec bouton à droite ===== */
 header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between;  /* Lien à gauche, bouton à droite */
   align-items: center;
   padding: 15px 30px;
   background-color: #f5f0eb;
   border-bottom: 2px solid #ddd;
 }
 
-/* Lien dans le header */
+/* Lien "CLICK ME !!!!!" */
 header a {
   font-size: 1.5rem;
   font-weight: bold;
@@ -29,10 +29,10 @@ header a:hover {
   text-decoration: underline;
 }
 
-/* ===== BOUTON ===== */
+/* ===== BOUTON dans le header ===== */
 .noir {
   font-size: 20px;
-  width: 100px;
+  width: 120px;
   height: 45px;
   background-color: black;
   color: white;
@@ -46,47 +46,48 @@ header a:hover {
   background-color: #333;
 }
 
-/* ===== CONTENU PRINCIPAL - TOUT CENTRÉ ===== */
+/* ===== CONTENU PRINCIPAL ===== */
 .left {
   max-width: 900px;
-  margin: 30px auto;
+  margin: 20px auto;
   padding: 0 20px;
-  text-align: center; /* Centre tout le texte */
+}
+
+.left h1,
+.left h2,
+.left p,
+.left ul,
+.left li {
+  text-align: center;
 }
 
 .left h1 {
   font-size: 2.2rem;
   margin-bottom: 10px;
-  text-align: center;
 }
 
 .left p {
   font-size: 1.1rem;
   line-height: 1.6;
   margin: 15px 0;
-  text-align: center;
 }
 
 .left .intro-liste {
   font-size: 1.3rem;
   margin-top: 30px;
-  text-align: center;
 }
 
 .left ul {
-  list-style-position: inside; /* Puces à l'intérieur du texte centré */
+  list-style-position: inside;
   padding: 0;
-  text-align: center;
 }
 
 .left ul li {
   font-size: 1.05rem;
   line-height: 1.8;
   margin-bottom: 6px;
-  text-align: center;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
   header {
     flex-direction: column;
