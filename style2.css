@@ -4,20 +4,20 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  text-align: center; /* Centre tout le texte par défaut */
+  text-align: center; /* Centre tout le texte */
 }
 
 /* ===== EN-TÊTE ===== */
 header {
   display: flex;
-  justify-content: space-between;  /* Sépare le lien à gauche et le bouton à droite */
+  justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
   background-color: #f5f0eb;
   border-bottom: 2px solid #ddd;
 }
 
-/* Lien "CLICK ME !!!!!" dans le header */
+/* Lien dans le header */
 header a {
   font-size: 1.5rem;
   font-weight: bold;
@@ -29,10 +29,10 @@ header a:hover {
   text-decoration: underline;
 }
 
-/* ===== BOUTON (en dehors du header) ===== */
+/* ===== BOUTON ===== */
 .noir {
   font-size: 20px;
-  width: 120px;
+  width: 100px;
   height: 45px;
   background-color: black;
   color: white;
@@ -40,59 +40,53 @@ header a:hover {
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin: 10px auto;          /* Centre le bouton */
-  display: block;             /* Pour que margin auto fonctionne */
 }
 
 .noir:hover {
   background-color: #333;
 }
 
-/* ===== CONTENU PRINCIPAL ===== */
+/* ===== CONTENU PRINCIPAL - TOUT CENTRÉ ===== */
 .left {
   max-width: 900px;
-  margin: 20px auto;
+  margin: 30px auto;
   padding: 0 20px;
-  text-align: center;         /* Centre tout le texte à l'intérieur */
-}
-
-/* Force tous les textes à être centrés */
-.left h1,
-.left h2,
-.left p,
-.left ul,
-.left li {
-  text-align: center;
+  text-align: center; /* Centre tout le texte */
 }
 
 .left h1 {
   font-size: 2.2rem;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .left p {
   font-size: 1.1rem;
   line-height: 1.6;
   margin: 15px 0;
+  text-align: center;
 }
 
 .left .intro-liste {
   font-size: 1.3rem;
   margin-top: 30px;
+  text-align: center;
 }
 
 .left ul {
-  list-style-position: inside;   /* Puces alignées avec le texte centré */
+  list-style-position: inside; /* Puces à l'intérieur du texte centré */
   padding: 0;
+  text-align: center;
 }
 
 .left ul li {
   font-size: 1.05rem;
   line-height: 1.8;
   margin-bottom: 6px;
+  text-align: center;
 }
 
-/* ===== RESPONSIVE (petits écrans) ===== */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
   header {
     flex-direction: column;
