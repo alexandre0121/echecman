@@ -1,80 +1,50 @@
-/* ===== PAGE ENTIÈRE CENTRÉE ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html, body {
-    height: 100%;
-}
-
 body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-family: sans-serif;
-    background: rgb(151, 55, 55);
-    padding: 20px;
+  background-color: white;
 }
 
-/* ===== HEADER ===== */
-header {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 30px;
+.boutons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-left: 0; /* au cas où */
 }
 
-header a {
-    color: deeppink;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
+.noir, .blanc {
+  font-size: 20px;
+  width: 80px;
+  height: 40px;
+  text-align: center;
 }
 
-header button {
-    background: black;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 25px;
-    font-size: 1.2rem;
-    cursor: pointer;
+.noir {
+  background-color: black;
+  color: white;
 }
 
-/* ===== TEXTE CENTRÉ ===== */
-.center {
-    max-width: 800px;
-    width: 100%;
+.blanc {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
 }
 
-.center h1 {
-    font-size: 2.2rem;
-    margin-bottom: 20px;
+.left {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
 }
 
-.center p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin: 15px 0;
+.left h1,
+.left p,
+.left ul {
+  text-align: left;         /* tous les textes restent alignés à gauche */
 }
 
-.center h2 {
-    font-size: 1.4rem;
-    margin: 30px 0 15px;
+.left ul {
+  list-style-position: inside;  /* puces alignées avec le texte */
+  padding-left: 1.2em;          /* indentation pour les puces */
 }
 
-.center ul {
-    list-style: none;
-    padding: 0;
+.left .intro-liste {
+  padding-left: 1.2em;       /* même indentation que la liste */
 }
 
-.center ul li {
-    font-size: 1.05rem;
-    line-height: 1.8;
-    margin-bottom: 8px;
-}
