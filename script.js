@@ -84,7 +84,7 @@ function findKing(color) {
     return null;
 }
 
-// ==================== DÉPLACEMENTS (inchangés) ====================
+// ==================== DÉPLACEMENTS ====================
 function getPseudoLegalMoves(row, col, ignoreKingSafety = false) {
     const piece = board[row][col];
     if (!piece) return [];
@@ -433,7 +433,7 @@ async function tryMove(fromRow, fromCol, toRow, toCol) {
     return true;
 }
 
-// ==================== AFFICHAGE DES CAPTURES AVEC MULTIPLICATEUR ====================
+// ==================== AFFICHAGE DES CAPTURES AVEC MULTIPLICATEUR (SANS TOTAL) ====================
 function renderCapturedPieces() {
     const oldLeft = document.getElementById('capturedLeft');
     const oldRight = document.getElementById('capturedRight');
@@ -450,7 +450,7 @@ function renderCapturedPieces() {
         counts[key] = (counts[key] || 0) + 1;
     });
 
-    // Fonction pour créer une colonne
+    // Fonction pour créer une colonne sans total
     function createColumn(color, label, sideId) {
         const div = document.createElement('div');
         div.id = sideId;
@@ -481,12 +481,7 @@ function renderCapturedPieces() {
                 }
                 div.appendChild(item);
             });
-
-            const total = relevant.reduce((sum, k) => sum + counts[k], 0);
-            const totalEl = document.createElement('div');
-            totalEl.className = 'side-count';
-            totalEl.textContent = `(${total})`;
-            div.appendChild(totalEl);
+            // PAS de compteur total
         } else {
             div.textContent = label === '♚ Noirs' ? '♚' : '♔';
             div.style.cssText += 'font-size:1.5rem;opacity:0.3;display:flex;align-items:center;justify-content:center;';
