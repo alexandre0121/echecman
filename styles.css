@@ -6,6 +6,33 @@ body {
     padding: 20px;
 }
 
+/* En‑tête : juste le lien */
+header {
+    display: flex;
+    justify-content: flex-start;
+    max-width: 700px;
+    margin: 0 auto 20px;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+/* Classe pour le lien CLICK ME */
+.click-me {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: deeppink;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.click-me:hover {
+    text-decoration: underline;
+    background-color: rgba(255, 20, 147, 0.1);
+}
+
 /* Conteneur principal */
 #boardWrapper {
     display: flex;
@@ -80,27 +107,6 @@ th, td {
 
 .rien, .lettre, .chiffre {
     background-color: #d1a679;
-}
-
-/* En‑tête : pas de fond, lien à gauche */
-header {
-    display: flex;
-    align-items: center;
-    max-width: 700px;
-    margin: 0 auto 20px;
-    padding: 10px 20px;
-    /* fond transparent, pas de bordure */
-}
-
-header a {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: deeppink;
-    text-decoration: none;
-}
-
-header a:hover {
-    text-decoration: underline;
 }
 
 /* Boutons sous le plateau */
