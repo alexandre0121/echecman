@@ -1,166 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
-    
-    <!-- Possible de faire le plateau d'échec sur JavaScript si probléme avec le code -->
-    
-    <head>
-        <meta charset="UTF-8" />
-        <!-- Liens pour css et Javascript -->
-        <link href="styles.css" rel="stylesheet" />
-       
-        <title>PI</title>
-    </head>
-    <body>
-        
-      <script scr="script.js"></script>
-         <!-- Tête de page -->
-        
-        <header>
-          
-        <a class="hello" href="index2.html">CLICK ME !!!!!</a>
-          
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <link href="styles.css" rel="stylesheet" />
+    <title>Jeu d'échecs</title>
+</head>
+<body>
+    <header>
+        <a href="index2.html">CLICK ME !!!!!</a>
+        <!-- tu peux ajouter d'autres boutons ici si besoin -->
+    </header>
 
-          
-        </header>
-        
     <h1>Projet Individuel 11H</h1>
-    <p><strong>Voici mon projet individuel de 11H qui est un jeu d'échec dans le navigateur. </strong></p>
-        <!-- Début du plateau d'échec -->
-<table>
-  <tr>
-    <td class="rien"></td>
-    <td class="lettre">A</td>
-    <td class="lettre">B</td>
-    <td class="lettre">C</td>
-    <td class="lettre">D</td>
-    <td class="lettre">E</td>
-    <td class="lettre">F</td>
-    <td class="lettre">G</td>
-    <td class="lettre">H</td>
-    <td class="rien"></td>
-  </tr>
+    <p><strong>Voici mon projet individuel de 11H qui est un jeu d'échec dans le navigateur.</strong></p>
 
-  <tr>
-    <td class="chiffre">8</td>
-     <td class="pieces, noir"><img src="pieces_echec/tour_noir.svg"></td>
-    <td class="pieces. blanc"><img src="pieces_echec/cavalier_noir.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/foux_noir.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/roi_noir.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/dame_noir.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/foux_noir.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/cavalier_noir.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/tour_noir.svg"></td>
-    <td class="chiffre">8</td>
-  </tr>
+    <!-- Le plateau sera généré par JavaScript -->
+    <div id="boardWrapper"></div>
 
-  <tr>
-    <td class="chiffre">7</td>
-    <td class="pieces, blanc"><img src="pieces_echec/pions_noir.svg"></td>
-    <td class="pieces. noir"><img src="pieces_echec/pions_noir.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/pions_noir.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/pions_noir.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/pions_noir.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/pions_noir.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/pions_noir.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/pions_noir.svg"></td>
-    <td class="chiffre">7</td>
-  </tr>
-
-  <tr>
-    <td class="chiffre">6</td>
-    <td class="pieces, noir"></td>
-    <td class="pieces. blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="chiffre">6</td>
-  </tr>
-
-  <tr>
-    <td class="chiffre">5</td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces. noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="chiffre">5</td>
-  </tr>
-
-  <tr>
-    <td class="chiffre">4</td>
-    <td class="pieces, noir"></td>
-    <td class="pieces. blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="chiffre">4</td>
-  </tr>
-
-  <tr>
-    <td class="chiffre">3</td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces. noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="pieces, blanc"></td>
-    <td class="pieces, noir"></td>
-    <td class="chiffre">3</td>
-  </tr>
-
-  <tr>
-    <td class="chiffre">2</td>
-    <td class="pieces, noir"><img src="pieces_echec/pions_blanc.svg"></td>
-    <td class="pieces. blanc"><img src="pieces_echec/pions_blanc.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/pions_blanc.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/pions_blanc.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/pions_blanc.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/pions_blanc.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/pions_blanc.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/pions_blanc.svg"></td>
-    <td class="chiffre">2</td>
-  </tr>
-
-  <tr>
-    <td class="chiffre">1</td>
-    <td class="pieces, blanc"><img src="pieces_echec/tour_blanc.svg"></td>
-    <td class="pieces. noir"><img src="pieces_echec/cavalier_blanc.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/foux_blanc.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/roi_blanc.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/dame_blanche.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/foux_blanc.svg"></td>
-    <td class="pieces, blanc"><img src="pieces_echec/cavalier_blanc.svg"></td>
-    <td class="pieces, noir"><img src="pieces_echec/tour_blanc.svg"></td>
-    <td class="chiffre">1</td>
-  </tr>
-
-  <tr>
-    <td class="rien"></td>
-    <td class="lettre">A</td>
-    <td class="lettre">B</td>
-    <td class="lettre">C</td>
-    <td class="lettre">D</td>
-    <td class="lettre">E</td>
-    <td class="lettre">F</td>
-    <td class="lettre">G</td>
-    <td class="lettre">H</td>
-    <td class="rien"></td>
-  </tr>
-</table>
-
-        <!-- Fin du plateau d'échec -->
-      
-      <script src="script.js"></script>
-      
-    </body>
+    <script src="script.js"></script>
+</body>
 </html>
