@@ -1,12 +1,14 @@
 body {
   background-color: white;
+  text-align: center; /* Centre tout le contenu du body */
 }
 
+/* Conteneur des boutons (si utilisé) */
 .boutons {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center; /* Centre les boutons */
   gap: 10px;
-  margin-left: 0; /* au cas où */
+  margin: 10px 0;
 }
 
 .noir, .blanc {
@@ -14,11 +16,13 @@ body {
   width: 80px;
   height: 40px;
   text-align: center;
+  cursor: pointer;
 }
 
 .noir {
   background-color: black;
   color: white;
+  border: 1px solid #333;
 }
 
 .blanc {
@@ -27,26 +31,30 @@ body {
   border: 1px solid black;
 }
 
+/* Bloc principal de texte */
 .left {
   max-width: 800px;
-  margin: 0 auto;
-  text-align: left;
+  margin: 0 auto;          /* Centre le bloc horizontalement */
+  padding: 0 20px;
+  text-align: center;      /* Centre le texte à l'intérieur */
 }
 
+/* Force tout le texte à être centré */
 .left h1,
+.left h2,
 .left p,
+.left ul,
+.left li {
+  text-align: center;
+}
+
+/* Pour que les puces restent alignées avec le texte centré */
 .left ul {
-  text-align: left;         /* tous les textes restent alignés à gauche */
+  list-style-position: inside;
+  padding-left: 0;
 }
 
-.left ul {
-  list-style-position: inside;  /* puces alignées avec le texte */
-  padding-left: 1.2em;          /* indentation pour les puces */
+/* Petite marge pour les paragraphes */
+.left p {
+  margin: 10px 0;
 }
-
-.left .intro-liste {
-  padding-left: 1.2em;       /* même indentation que la liste */
-}
-
-
-
