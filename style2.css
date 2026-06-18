@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  text-align: center; /* Centre TOUT le texte */
+  text-align: center; /* Centre TOUT */
 }
 
 /* ===== EN-TÊTE avec bouton à droite ===== */
@@ -17,7 +17,6 @@ header {
   border-bottom: 2px solid #ddd;
 }
 
-/* Lien "CLICK ME !!!!!" */
 header a {
   font-size: 1.5rem;
   font-weight: bold;
@@ -29,7 +28,6 @@ header a:hover {
   text-decoration: underline;
 }
 
-/* ===== BOUTON dans le header ===== */
 .noir {
   font-size: 20px;
   width: 120px;
@@ -51,18 +49,7 @@ header a:hover {
   max-width: 900px;
   margin: 20px auto;
   padding: 0 20px;
-}
-
-/* Centre TOUS les éléments */
-.left h1,
-.left h2,
-.left p,
-.left ul,
-.left li,
-.left strong,
-.left i,
-.left br {
-  text-align: center;
+  text-align: center; /* Centre TOUT le contenu */
 }
 
 .left h1 {
