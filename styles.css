@@ -4,36 +4,26 @@ body {
     font-family: sans-serif;
     margin: 0;
     padding: 20px;
+    padding-top: 60px; /* pour que le titre ne soit pas caché par le lien */
 }
 
-/* En‑tête : juste le lien */
-header {
-    display: flex;
-    justify-content: flex-start;
-    max-width: 700px;
-    margin: 0 auto 20px;
-    padding: 0;
-    background: transparent;
-    border: none;
-}
-
-/* Classe pour le lien CLICK ME */
-.click-me {
+/* ===== LIEN EN HAUT À GAUCHE ===== */
+#clickMe {
+    position: absolute;
+    top: 15px;
+    left: 20px;
     font-size: 1.5rem;
     font-weight: bold;
     color: deeppink;
     text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 10px;
-    transition: background-color 0.3s, color 0.3s;
+    z-index: 10;
 }
 
-.click-me:hover {
+#clickMe:hover {
     text-decoration: underline;
-    background-color: rgba(255, 20, 147, 0.1);
 }
 
-/* Conteneur principal */
+/* ===== CONTENEUR PRINCIPAL ===== */
 #boardWrapper {
     display: flex;
     align-items: stretch;
