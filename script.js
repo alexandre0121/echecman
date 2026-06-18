@@ -20,6 +20,9 @@ let selectedRow = null;
 let selectedCol = null;
 let validMovesList = [];
 
+// Retournement de l'échiquier
+let flipped = false;
+
 // Mapping des images
 const pieceImages = {
     'white_king': 'pieces_echec/roi_blanc.svg',
@@ -76,6 +79,7 @@ function resetGame() {
     selectedRow = null;
     selectedCol = null;
     validMovesList = [];
+    flipped = false;
     renderBoard();
     updateStatusMessage();
 }
@@ -189,7 +193,6 @@ function getPseudoLegalMoves(row, col, ignoreKingSafety = false) {
                 const rookMovedLeft = (color === 'white') ? whiteRookQueensideMoved : blackRookQueensideMoved;
                 const rookLeft = board[row][rookColLeft];
                 if (!rookMovedLeft && rookLeft && rookLeft.piece === 'rook' && rookLeft.color === color) {
-                    // Cases b, c, d doivent être vides (cols 1, 2, 3) ; le roi passe par c et d
                     if (!board[row][1] && !board[row][2] && !board[row][3] &&
                         !isSquareAttacked(row,2,color) && !isSquareAttacked(row,3,color)) {
                         moves.push({row:row, col:2});
@@ -222,8 +225,6 @@ function getPseudoLegalMoves(row, col, ignoreKingSafety = false) {
             }
         }
         // Prise en passant
-        // enPassantTarget est la case où le pion adverse peut être capturé
-        // Elle est à row+dir (devant le pion qui capture)
         if (enPassantTarget) {
             const epRow = enPassantTarget.row;
             const epCol = enPassantTarget.col;
@@ -259,7 +260,6 @@ function getLegalMoves(row, col) {
     const color = piece.color;
 
     for (let move of pseudoMoves) {
-        // Sauvegarde
         const savedBoard = JSON.parse(JSON.stringify(board));
         const savedEnPassant = enPassantTarget;
         const savedWhiteKingMoved = whiteKingMoved;
@@ -269,14 +269,12 @@ function getLegalMoves(row, col) {
         const savedBlackRookKingside = blackRookKingsideMoved;
         const savedBlackRookQueenside = blackRookQueensideMoved;
 
-        // Exécution temporaire
         const fromPiece = board[row][col];
         let enPassantCapture = false;
         let capturedPawnPos = null;
         if (piece.piece === 'pawn' && enPassantTarget && 
             move.row === enPassantTarget.row && move.col === enPassantTarget.col) {
             enPassantCapture = true;
-            // Le pion capturé est sur la même rangée que le pion qui capture (pas dans la direction dir)
             capturedPawnPos = { row: row, col: move.col };
         }
         board[move.row][move.col] = fromPiece;
@@ -284,7 +282,6 @@ function getLegalMoves(row, col) {
         if (enPassantCapture && capturedPawnPos) {
             board[capturedPawnPos.row][capturedPawnPos.col] = null;
         }
-        // Gestion roque
         if (piece.piece === 'king' && Math.abs(move.col - col) === 2) {
             const rookFromCol = (move.col === 6) ? 7 : 0;
             const rookToCol = (move.col === 6) ? 5 : 3;
@@ -294,7 +291,6 @@ function getLegalMoves(row, col) {
                 board[row][rookFromCol] = null;
             }
         }
-        // Vérifier échec
         const kingPos = findKing(color);
         let kingInCheck = false;
         if (kingPos) {
@@ -303,7 +299,6 @@ function getLegalMoves(row, col) {
         if (!kingInCheck) {
             legalMoves.push(move);
         }
-        // Restauration
         board = savedBoard;
         enPassantTarget = savedEnPassant;
         whiteKingMoved = savedWhiteKingMoved;
@@ -316,23 +311,20 @@ function getLegalMoves(row, col) {
     return legalMoves;
 }
 
-// Exécuter un mouvement (sans vérifier légalité, juste le déplacement)
+// Exécuter un mouvement
 function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
     const piece = board[fromRow][fromCol];
     if (!piece) return false;
     const color = piece.color;
 
-    // Gestion prise en passant
     let enPassantCapture = false;
     let capturedPawnPos = null;
     if (piece.piece === 'pawn' && enPassantTarget && 
         toRow === enPassantTarget.row && toCol === enPassantTarget.col) {
         enPassantCapture = true;
-        // Le pion adverse capturé est sur la même rangée que le pion qui bouge (pas la rangée d'arrivée)
         capturedPawnPos = { row: fromRow, col: toCol };
     }
 
-    // Gestion roque
     let isCastling = false;
     if (piece.piece === 'king' && Math.abs(toCol - fromCol) === 2) {
         isCastling = true;
@@ -347,16 +339,13 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         else blackKingMoved = true;
     }
 
-    // Déplacer la pièce
     board[toRow][toCol] = piece;
     board[fromRow][fromCol] = null;
 
-    // Supprimer le pion capturé en passant
     if (enPassantCapture && capturedPawnPos) {
         board[capturedPawnPos.row][capturedPawnPos.col] = null;
     }
 
-    // Mise à jour droits roque pour les tours
     if (piece.piece === 'rook') {
         if (color === 'white') {
             if (fromCol === 0) whiteRookQueensideMoved = true;
@@ -371,7 +360,6 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         else blackKingMoved = true;
     }
 
-    // Promotion
     if (piece.piece === 'pawn') {
         const promoRow = (color === 'white') ? 0 : 7;
         if (toRow === promoRow) {
@@ -379,7 +367,6 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         }
     }
 
-    // Mise à jour enPassantTarget
     enPassantTarget = null;
     if (piece.piece === 'pawn' && Math.abs(toRow - fromRow) === 2) {
         const midRow = (fromRow + toRow) / 2;
@@ -422,7 +409,6 @@ function getGameStatus() {
 // ==================== PROMOTION MODALE ====================
 function showPromotionModal(color) {
     return new Promise((resolve) => {
-        // Overlay
         const overlay = document.createElement('div');
         overlay.id = 'promoOverlay';
         overlay.style.cssText = `
@@ -465,7 +451,7 @@ function showPromotionModal(color) {
     });
 }
 
-// Tentative de mouvement (async pour la promotion)
+// Tentative de mouvement
 async function tryMove(fromRow, fromCol, toRow, toCol) {
     if (gameOver) return false;
     const piece = board[fromRow][fromCol];
@@ -475,7 +461,6 @@ async function tryMove(fromRow, fromCol, toRow, toCol) {
     const isValid = legalMoves.some(m => m.row === toRow && m.col === toCol);
     if (!isValid) return false;
 
-    // Sauvegarde
     const savedBoard = JSON.parse(JSON.stringify(board));
     const savedEnPassant = enPassantTarget;
     const savedWhiteKingMoved = whiteKingMoved;
@@ -485,7 +470,6 @@ async function tryMove(fromRow, fromCol, toRow, toCol) {
     const savedBlackRookKingside = blackRookKingsideMoved;
     const savedBlackRookQueenside = blackRookQueensideMoved;
 
-    // Gestion promotion
     const pieceMoving = board[fromRow][fromCol];
     const promoRow = (pieceMoving.color === 'white') ? 0 : 7;
     const isPromotion = (pieceMoving.piece === 'pawn' && toRow === promoRow);
@@ -497,7 +481,6 @@ async function tryMove(fromRow, fromCol, toRow, toCol) {
     const success = executeMove(fromRow, fromCol, toRow, toCol, promotionChoice);
     if (!success) return false;
 
-    // Vérifier que le roi du joueur actuel n'est pas en échec
     if (isCheck(turn)) {
         board = savedBoard;
         enPassantTarget = savedEnPassant;
@@ -510,10 +493,8 @@ async function tryMove(fromRow, fromCol, toRow, toCol) {
         return false;
     }
 
-    // Changement de tour
     turn = (turn === 'white') ? 'black' : 'white';
 
-    // Vérifier fin de partie
     const status = getGameStatus();
     if (status.isOver) {
         gameOver = true;
@@ -531,18 +512,21 @@ function renderBoard() {
     if (!oldTable) return;
 
     const LABELS = ['A','B','C','D','E','F','G','H'];
+    const LABELS_FLIPPED = ['H','G','F','E','D','C','B','A'];
+    const labels = flipped ? LABELS_FLIPPED : LABELS;
 
     function makeCorner() {
         const td = document.createElement('td');
         td.style.cssText = 'width:32px;height:32px;background:#d1a679;';
         return td;
     }
+
     function makeLetterRow() {
         const tr = document.createElement('tr');
         tr.appendChild(makeCorner());
-        for (let c = 0; c < 8; c++) {
+        for (let colIdx = 0; colIdx < 8; colIdx++) {
             const td = document.createElement('td');
-            td.textContent = LABELS[c];
+            td.textContent = labels[colIdx];
             td.style.cssText = 'width:60px;height:32px;text-align:center;font-weight:bold;background:#d1a679;font-family:sans-serif;font-size:14px;';
             tr.appendChild(td);
         }
@@ -554,15 +538,20 @@ function renderBoard() {
     newTable.style.cssText = 'border-collapse:collapse;margin:auto;border:3px solid #4a2e1e;';
     newTable.appendChild(makeLetterRow());
 
-    for (let r = 0; r < 8; r++) {
+    const rowIndices = flipped ? [7,6,5,4,3,2,1,0] : [0,1,2,3,4,5,6,7];
+    const colIndices = flipped ? [7,6,5,4,3,2,1,0] : [0,1,2,3,4,5,6,7];
+
+    for (let displayRow = 0; displayRow < 8; displayRow++) {
         const tr = document.createElement('tr');
+        const r = rowIndices[displayRow];
 
         const numL = document.createElement('td');
         numL.textContent = 8 - r;
         numL.style.cssText = 'width:32px;height:60px;text-align:center;font-weight:bold;background:#d1a679;font-family:sans-serif;font-size:14px;';
         tr.appendChild(numL);
 
-        for (let c = 0; c < 8; c++) {
+        for (let displayCol = 0; displayCol < 8; displayCol++) {
+            const c = colIndices[displayCol];
             const td = document.createElement('td');
             td.style.cssText = 'width:60px;height:60px;text-align:center;vertical-align:middle;cursor:pointer;position:relative;box-sizing:border-box;border:1px solid #4a2e1e;';
 
@@ -572,7 +561,6 @@ function renderBoard() {
             const isValidMove = validMovesList.some(mv => mv.row === r && mv.col === c);
             const isKingInCheck = piece && piece.piece === 'king' && isCheck(piece.color);
 
-            // Priorité des couleurs : échec > sélection > coup valide > normal
             let bg;
             if (isKingInCheck)      bg = '#ff4444';
             else if (isSelected)    bg = '#f6f669';
@@ -580,7 +568,6 @@ function renderBoard() {
             else                    bg = isDark ? '#b58863' : '#f0d9b5';
             td.style.backgroundColor = bg;
 
-            // Image pièce
             if (piece) {
                 const src = pieceImages[`${piece.color}_${piece.piece}`];
                 if (src) {
@@ -591,7 +578,6 @@ function renderBoard() {
                 }
             }
 
-            // Point rond sur cases vides accessibles
             if (isValidMove && !piece) {
                 const dot = document.createElement('div');
                 dot.style.cssText = 'width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,0.25);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;';
@@ -612,6 +598,45 @@ function renderBoard() {
 
     newTable.appendChild(makeLetterRow());
     oldTable.replaceWith(newTable);
+
+    // Ajouter les boutons sous l'échiquier
+    addButtonsUnderBoard();
+}
+
+// ==================== BOUTONS SOUS L'ÉCHIQUIER ====================
+function addButtonsUnderBoard() {
+    // Supprimer les anciens conteneurs de boutons
+    const oldContainer = document.getElementById('buttonContainer');
+    if (oldContainer) oldContainer.remove();
+
+    const table = document.querySelector('table');
+    if (!table) return;
+
+    const container = document.createElement('div');
+    container.id = 'buttonContainer';
+    container.style.cssText = 'text-align:center;margin-top:15px;';
+
+    // Bouton Rejouer
+    const replayBtn = document.createElement('button');
+    replayBtn.textContent = '⟳ Rejouer';
+    replayBtn.style.cssText = 'font-size:18px;padding:10px 25px;background-color:#4CAF50;color:white;border:none;border-radius:8px;cursor:pointer;margin:0 8px;';
+    replayBtn.addEventListener('click', () => resetGame());
+
+    // Bouton Retourner
+    const flipBtn = document.createElement('button');
+    flipBtn.textContent = '🔄 Retourner';
+    flipBtn.style.cssText = 'font-size:18px;padding:10px 25px;background-color:#2196F3;color:white;border:none;border-radius:8px;cursor:pointer;margin:0 8px;';
+    flipBtn.addEventListener('click', () => {
+        flipped = !flipped;
+        selectedRow = null;
+        selectedCol = null;
+        validMovesList = [];
+        renderBoard();
+    });
+
+    container.appendChild(replayBtn);
+    container.appendChild(flipBtn);
+    table.parentNode.insertBefore(container, table.nextSibling);
 }
 
 function updateStatusMessage() {
@@ -627,12 +652,13 @@ function updateStatusMessage() {
         statusDiv.style.borderRadius = '10px';
         statusDiv.style.backgroundColor = '#d1a679';
         statusDiv.style.display = 'inline-block';
+        
         const table = document.querySelector('table');
         if (table) {
-            const newDiv = document.createElement('div');
-            newDiv.style.textAlign = 'center';
-            newDiv.appendChild(statusDiv);
-            table.insertAdjacentElement('afterend', newDiv);
+            const wrapper = document.createElement('div');
+            wrapper.style.textAlign = 'center';
+            wrapper.appendChild(statusDiv);
+            table.parentNode.insertBefore(wrapper, table.nextSibling);
         }
     }
     if (gameOver) {
@@ -665,7 +691,6 @@ function onSquareClick(row, col) {
             renderBoard();
         }
     } else {
-        // Clic sur la même case : désélectionner
         if (selectedRow === row && selectedCol === col) {
             selectedRow = null;
             selectedCol = null;
@@ -673,7 +698,6 @@ function onSquareClick(row, col) {
             renderBoard();
             return;
         }
-        // Clic sur une pièce alliée : changer la sélection
         const piece = board[row][col];
         if (piece && piece.color === turn) {
             selectedRow = row;
@@ -682,7 +706,6 @@ function onSquareClick(row, col) {
             renderBoard();
             return;
         }
-        // Tentative de mouvement
         const fromRow = selectedRow;
         const fromCol = selectedCol;
         selectedRow = null;
@@ -693,29 +716,11 @@ function onSquareClick(row, col) {
     }
 }
 
-// Les événements sont attachés directement dans renderBoard()
-function bindEvents() { /* intégré dans renderBoard */ }
-
-// Bouton Rejouer
-function addReplayButton() {
-    if (document.getElementById('replayButton')) return;
-    const header = document.querySelector('header');
-    if (header) {
-        const replayBtn = document.createElement('button');
-        replayBtn.id = 'replayButton';
-        replayBtn.textContent = '⟳ Rejouer';
-        replayBtn.style.fontSize = '18px';
-        replayBtn.style.padding = '0 14px';
-        replayBtn.style.height = '35px';
-        replayBtn.style.backgroundColor = '#4CAF50';
-        replayBtn.style.color = 'white';
-        replayBtn.style.border = 'none';
-        replayBtn.style.borderRadius = '5px';
-        replayBtn.style.cursor = 'pointer';
-        replayBtn.style.marginLeft = '15px';
-        replayBtn.addEventListener('click', () => resetGame());
-        header.appendChild(replayBtn);
-    }
+// ==================== INITIALISATION ====================
+function initGame() {
+    initBoard();
+    renderBoard();
+    updateStatusMessage();
 }
 
 // Fonction lep existante
@@ -732,15 +737,6 @@ function lep() {
         }
         clickCount++;
     }
-}
-
-// Initialisation
-function initGame() {
-    initBoard();
-    addReplayButton();
-    bindEvents();      // Les événements sont attachés une fois
-    renderBoard();
-    updateStatusMessage();
 }
 
 if (document.readyState === 'loading') {
