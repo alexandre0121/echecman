@@ -1,0 +1,52 @@
+body {
+  background-color: white;
+}
+
+.boutons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-left: 0; /* au cas où */
+}
+
+.noir, .blanc {
+  font-size: 20px;
+  width: 80px;
+  height: 40px;
+  text-align: center;
+}
+
+.noir {
+  background-color: black;
+  color: white;
+}
+
+.blanc {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.left {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.left h1,
+.left p,
+.left ul {
+  text-align: left;         /* tous les textes restent alignés à gauche */
+}
+
+.left ul {
+  list-style-position: inside;  /* puces alignées avec le texte */
+  padding-left: 1.2em;          /* indentation pour les puces */
+}
+
+.left .intro-liste {
+  padding-left: 1.2em;       /* même indentation que la liste */
+}
+
+
+

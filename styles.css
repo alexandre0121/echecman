@@ -1,0 +1,56 @@
+body{
+    background-color: burlywood;  /*change la couleur de fond*/
+    text-align: center;           /*aligne le text au milieu*/
+}
+
+
+
+table {
+  border: thin solid blue;
+  border-collapse: collapse;
+  margin: auto;
+  text-align: center;
+}
+
+th, td {
+  border: thin solid black;
+  width: 60px;
+  height: 60px;
+}
+
+.rien{
+  background-color: #d1a679;
+}
+
+.lettre{
+  background-color: #d1a679;
+}
+
+.chiffre{
+  background-color: #d1a679;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Yo {
+  font-size: 20px;
+  width: 80px;
+  height: 40px;
+}
+
+.pieces img {
+  width: 35px;
+  height: 35px;
+  
+}
+
+.blanc {
+  background-color: white;
+}
+
+.noir {
+  background-color: darkgrey;
+}
