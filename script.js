@@ -1,6 +1,4 @@
-// ==================== JEU D'ÉCHECS COMPLET ====================
-// Toutes les règles : déplacements, roque, prise en passant, promotion, échec et mat, pat
-
+// ==================== JEU D'ÉCHECS COMPLET AVEC CAPTURES ====================
 let board = Array(8).fill().map(() => Array(8).fill(null));
 let turn = 'white';
 let gameOver = false;
@@ -22,6 +20,9 @@ let validMovesList = [];
 
 // Retournement de l'échiquier
 let flipped = false;
+
+// Pièces capturées
+let capturedPieces = [];
 
 // Mapping des images
 const pieceImages = {
@@ -46,24 +47,17 @@ function initBoard() {
             board[i][j] = null;
         }
     }
-    // Pions
     for (let c = 0; c < 8; c++) {
         board[6][c] = { piece: 'pawn', color: 'white' };
         board[1][c] = { piece: 'pawn', color: 'black' };
     }
-    // Pièces majeures blanches (ligne 7)
     const whiteBack = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook'];
-    for (let c = 0; c < 8; c++) {
-        board[7][c] = { piece: whiteBack[c], color: 'white' };
-    }
-    // Pièces majeures noires (ligne 0)
+    for (let c = 0; c < 8; c++) board[7][c] = { piece: whiteBack[c], color: 'white' };
     const blackBack = ['rook', 'knight', 'bishop', 'queen', 'king', 'bishop', 'knight', 'rook'];
-    for (let c = 0; c < 8; c++) {
-        board[0][c] = { piece: blackBack[c], color: 'black' };
-    }
+    for (let c = 0; c < 8; c++) board[0][c] = { piece: blackBack[c], color: 'black' };
 }
 
-// Réinitialisation
+// Réinitialisation complète
 function resetGame() {
     initBoard();
     turn = 'white';
@@ -80,6 +74,7 @@ function resetGame() {
     selectedCol = null;
     validMovesList = [];
     flipped = false;
+    capturedPieces = [];
     renderBoard();
     updateStatusMessage();
 }
@@ -174,7 +169,6 @@ function getPseudoLegalMoves(row, col, ignoreKingSafety = false) {
                 }
             }
         }
-        // Roque
         if (!ignoreKingSafety) {
             const kingMoved = (color === 'white') ? whiteKingMoved : blackKingMoved;
             if (!kingMoved && !isSquareAttacked(row, col, color)) {
@@ -205,26 +199,20 @@ function getPseudoLegalMoves(row, col, ignoreKingSafety = false) {
     else if (piece.piece === 'pawn') {
         const dir = (color === 'white') ? -1 : 1;
         const startRow = (color === 'white') ? 6 : 1;
-        // Avancer d'une case
         const nr1 = row + dir;
         if (nr1>=0 && nr1<8 && !board[nr1][col]) {
             moves.push({row:nr1, col:col});
-            // Avancer de deux cases
             if (row === startRow && nr1+dir>=0 && nr1+dir<8 && !board[nr1+dir][col]) {
                 moves.push({row:nr1+dir, col:col});
             }
         }
-        // Captures diagonales
         for (let dc of [-1,1]) {
             const nr = row+dir, nc = col+dc;
             if (nr>=0 && nr<8 && nc>=0 && nc<8) {
                 const target = board[nr][nc];
-                if (target && target.color !== color) {
-                    moves.push({row:nr, col:nc});
-                }
+                if (target && target.color !== color) moves.push({row:nr, col:nc});
             }
         }
-        // Prise en passant
         if (enPassantTarget) {
             const epRow = enPassantTarget.row;
             const epCol = enPassantTarget.col;
@@ -251,7 +239,7 @@ function isSquareAttacked(row, col, defenderColor) {
     return false;
 }
 
-// Coups légaux (sans mettre son roi en échec)
+// Coups légaux
 function getLegalMoves(row, col) {
     const piece = board[row][col];
     if (!piece) return [];
@@ -311,20 +299,24 @@ function getLegalMoves(row, col) {
     return legalMoves;
 }
 
-// Exécuter un mouvement
+// Exécuter un mouvement (avec capture)
 function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
     const piece = board[fromRow][fromCol];
     if (!piece) return false;
     const color = piece.color;
 
+    // Vérifier si on capture une pièce
+    let capturedTarget = board[toRow][toCol]; // pour capture normale
     let enPassantCapture = false;
     let capturedPawnPos = null;
     if (piece.piece === 'pawn' && enPassantTarget && 
         toRow === enPassantTarget.row && toCol === enPassantTarget.col) {
         enPassantCapture = true;
         capturedPawnPos = { row: fromRow, col: toCol };
+        capturedTarget = board[capturedPawnPos.row][capturedPawnPos.col]; // le pion capturé
     }
 
+    // Gestion roque
     let isCastling = false;
     if (piece.piece === 'king' && Math.abs(toCol - fromCol) === 2) {
         isCastling = true;
@@ -346,6 +338,12 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         board[capturedPawnPos.row][capturedPawnPos.col] = null;
     }
 
+    // Si une pièce a été capturée, on l'ajoute à la liste
+    if (capturedTarget) {
+        capturedPieces.push({ color: capturedTarget.color, piece: capturedTarget.piece });
+    }
+
+    // Mise à jour droits roque pour les tours
     if (piece.piece === 'rook') {
         if (color === 'white') {
             if (fromCol === 0) whiteRookQueensideMoved = true;
@@ -360,6 +358,7 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         else blackKingMoved = true;
     }
 
+    // Promotion
     if (piece.piece === 'pawn') {
         const promoRow = (color === 'white') ? 0 : 7;
         if (toRow === promoRow) {
@@ -506,7 +505,80 @@ async function tryMove(fromRow, fromCol, toRow, toCol) {
     return true;
 }
 
-// ==================== AFFICHAGE ====================
+// ==================== AFFICHAGE DES CAPTURES ====================
+function renderCapturedPieces() {
+    // Supprimer les anciens conteneurs
+    const oldTop = document.getElementById('capturedTop');
+    const oldBottom = document.getElementById('capturedBottom');
+    if (oldTop) oldTop.remove();
+    if (oldBottom) oldBottom.remove();
+
+    const table = document.querySelector('table');
+    if (!table) return;
+
+    const whiteCaptured = capturedPieces.filter(p => p.color === 'white');
+    const blackCaptured = capturedPieces.filter(p => p.color === 'black');
+
+    // Conteneur haut (pièces noires capturées par les blancs)
+    const topDiv = document.createElement('div');
+    topDiv.id = 'capturedTop';
+    topDiv.style.cssText = 'text-align:center; margin-bottom:8px; font-size:1rem; display:flex; align-items:center; justify-content:center; gap:5px; flex-wrap:wrap; background:rgba(255,255,255,0.5); padding:6px 12px; border-radius:20px;';
+
+    if (blackCaptured.length > 0) {
+        const label = document.createElement('span');
+        label.textContent = '⚪ Prises par les Blancs : ';
+        label.style.fontWeight = 'bold';
+        topDiv.appendChild(label);
+        blackCaptured.forEach(p => {
+            const img = document.createElement('img');
+            img.src = pieceImages[`black_${p.piece}`];
+            img.style.cssText = 'width:28px; height:28px; margin:0 2px; vertical-align:middle;';
+            img.title = `Pièce noire ${p.piece}`;
+            topDiv.appendChild(img);
+        });
+        const count = document.createElement('span');
+        count.textContent = `(${blackCaptured.length})`;
+        count.style.fontSize = '0.9rem';
+        count.style.marginLeft = '5px';
+        topDiv.appendChild(count);
+    } else {
+        topDiv.textContent = '⚪ Aucune pièce noire capturée';
+        topDiv.style.color = '#888';
+    }
+
+    // Conteneur bas (pièces blanches capturées par les noirs)
+    const bottomDiv = document.createElement('div');
+    bottomDiv.id = 'capturedBottom';
+    bottomDiv.style.cssText = 'text-align:center; margin-top:8px; font-size:1rem; display:flex; align-items:center; justify-content:center; gap:5px; flex-wrap:wrap; background:rgba(255,255,255,0.5); padding:6px 12px; border-radius:20px;';
+
+    if (whiteCaptured.length > 0) {
+        const label = document.createElement('span');
+        label.textContent = '⚫ Prises par les Noirs : ';
+        label.style.fontWeight = 'bold';
+        bottomDiv.appendChild(label);
+        whiteCaptured.forEach(p => {
+            const img = document.createElement('img');
+            img.src = pieceImages[`white_${p.piece}`];
+            img.style.cssText = 'width:28px; height:28px; margin:0 2px; vertical-align:middle;';
+            img.title = `Pièce blanche ${p.piece}`;
+            bottomDiv.appendChild(img);
+        });
+        const count = document.createElement('span');
+        count.textContent = `(${whiteCaptured.length})`;
+        count.style.fontSize = '0.9rem';
+        count.style.marginLeft = '5px';
+        bottomDiv.appendChild(count);
+    } else {
+        bottomDiv.textContent = '⚫ Aucune pièce blanche capturée';
+        bottomDiv.style.color = '#888';
+    }
+
+    // Insérer avant et après le tableau
+    table.parentNode.insertBefore(topDiv, table);
+    table.parentNode.insertBefore(bottomDiv, table.nextSibling);
+}
+
+// ==================== AFFICHAGE DU PLATEAU ====================
 function renderBoard() {
     const oldTable = document.querySelector('table');
     if (!oldTable) return;
@@ -599,13 +671,12 @@ function renderBoard() {
     newTable.appendChild(makeLetterRow());
     oldTable.replaceWith(newTable);
 
-    // Ajouter les boutons sous l'échiquier
     addButtonsUnderBoard();
+    renderCapturedPieces(); // Affichage des captures
 }
 
 // ==================== BOUTONS SOUS L'ÉCHIQUIER ====================
 function addButtonsUnderBoard() {
-    // Supprimer les anciens conteneurs de boutons
     const oldContainer = document.getElementById('buttonContainer');
     if (oldContainer) oldContainer.remove();
 
@@ -616,13 +687,11 @@ function addButtonsUnderBoard() {
     container.id = 'buttonContainer';
     container.style.cssText = 'text-align:center;margin-top:15px;';
 
-    // Bouton Rejouer
     const replayBtn = document.createElement('button');
     replayBtn.textContent = '⟳ Rejouer';
     replayBtn.style.cssText = 'font-size:18px;padding:10px 25px;background-color:#4CAF50;color:white;border:none;border-radius:8px;cursor:pointer;margin:0 8px;';
     replayBtn.addEventListener('click', () => resetGame());
 
-    // Bouton Retourner
     const flipBtn = document.createElement('button');
     flipBtn.textContent = '🔄 Retourner';
     flipBtn.style.cssText = 'font-size:18px;padding:10px 25px;background-color:#2196F3;color:white;border:none;border-radius:8px;cursor:pointer;margin:0 8px;';

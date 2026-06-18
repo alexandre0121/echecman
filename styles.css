@@ -1,56 +1,117 @@
-body{
-    background-color: burlywood;  /*change la couleur de fond*/
-    text-align: center;           /*aligne le text au milieu*/
+body {
+    background-color: burlywood;
+    text-align: center;
+    font-family: sans-serif;
+    margin: 0;
+    padding: 20px;
 }
 
-
-
 table {
-  border: thin solid blue;
-  border-collapse: collapse;
-  margin: auto;
-  text-align: center;
+    border-collapse: collapse;
+    margin: auto;
+    border: 3px solid #4a2e1e;
 }
 
 th, td {
-  border: thin solid black;
-  width: 60px;
-  height: 60px;
+    border: 1px solid #4a2e1e;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    vertical-align: middle;
 }
 
-.rien{
-  background-color: #d1a679;
-}
-
-.lettre{
-  background-color: #d1a679;
-}
-
-.chiffre{
-  background-color: #d1a679;
+.rien, .lettre, .chiffre {
+    background-color: #d1a679;
 }
 
 header {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 700px;
+    margin: 0 auto 20px;
+    padding: 10px 20px;
+    background: #f5e6d3;
+    border-radius: 12px;
 }
 
-.Yo {
-  font-size: 20px;
-  width: 80px;
-  height: 40px;
+header a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: deeppink;
+    text-decoration: none;
 }
 
-.pieces img {
-  width: 35px;
-  height: 35px;
-  
+header a:hover {
+    text-decoration: underline;
 }
 
-.blanc {
-  background-color: white;
+/* Pièces capturées */
+#capturedTop, #capturedBottom {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(4px);
+    padding: 6px 16px;
+    border-radius: 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin: 6px auto;
+    max-width: 90%;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px 8px;
 }
 
-.noir {
-  background-color: darkgrey;
+#capturedTop img, #capturedBottom img {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.2s;
+    vertical-align: middle;
+}
+
+#capturedTop img:hover, #capturedBottom img:hover {
+    transform: scale(1.3);
+}
+
+/* Boutons sous le plateau */
+#buttonContainer {
+    text-align: center;
+    margin-top: 15px;
+}
+
+#buttonContainer button {
+    font-size: 18px;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 8px;
+    transition: background 0.2s;
+}
+
+#buttonContainer button:first-child {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#buttonContainer button:last-child {
+    background-color: #2196F3;
+    color: white;
+}
+
+#buttonContainer button:hover {
+    opacity: 0.85;
+}
+
+/* Status message */
+#gameStatus {
+    margin: 20px auto;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #d1a679;
+    display: inline-block;
 }
