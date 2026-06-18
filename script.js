@@ -17,8 +17,6 @@ let selectedCol = null;
 let validMovesList = [];
 
 let flipped = false;
-
-// === Liste des pièces capturées ===
 let capturedPieces = [];
 
 const pieceImages = {
@@ -71,7 +69,7 @@ function resetGame() {
     selectedCol = null;
     validMovesList = [];
     flipped = false;
-    capturedPieces = [];      // ← on vide les captures
+    capturedPieces = [];
     renderBoard();
     updateStatusMessage();
 }
@@ -86,7 +84,7 @@ function findKing(color) {
     return null;
 }
 
-// ==================== DÉPLACEMENTS ====================
+// ==================== DÉPLACEMENTS (inchangés) ====================
 function getPseudoLegalMoves(row, col, ignoreKingSafety = false) {
     const piece = board[row][col];
     if (!piece) return [];
@@ -272,7 +270,6 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
     if (!piece) return false;
     const color = piece.color;
 
-    // Détecter la pièce capturée (normale ou en passant)
     let capturedTarget = board[toRow][toCol];
     let enPassantCapture = false;
     let capturedPawnPos = null;
@@ -283,7 +280,6 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         capturedTarget = board[capturedPawnPos.row][capturedPawnPos.col];
     }
 
-    // Roque
     let isCastling = false;
     if (piece.piece === 'king' && Math.abs(toCol - fromCol) === 2) {
         isCastling = true;
@@ -298,14 +294,12 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         else blackKingMoved = true;
     }
 
-    // Déplacement
     board[toRow][toCol] = piece;
     board[fromRow][fromCol] = null;
     if (enPassantCapture && capturedPawnPos) {
         board[capturedPawnPos.row][capturedPawnPos.col] = null;
     }
 
-    // === AJOUT DE LA PIÈCE CAPTURÉE ===
     if (capturedTarget) {
         capturedPieces.push({
             color: capturedTarget.color,
@@ -313,7 +307,6 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         });
     }
 
-    // Mise à jour des droits de roque
     if (piece.piece === 'rook') {
         if (color === 'white') {
             if (fromCol === 0) whiteRookQueensideMoved = true;
@@ -328,7 +321,6 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         else blackKingMoved = true;
     }
 
-    // Promotion
     if (piece.piece === 'pawn') {
         const promoRow = (color === 'white') ? 0 : 7;
         if (toRow === promoRow) {
@@ -336,7 +328,6 @@ function executeMove(fromRow, fromCol, toRow, toCol, promotionPiece = 'queen') {
         }
     }
 
-    // Mise à jour de la cible "en passant"
     enPassantTarget = null;
     if (piece.piece === 'pawn' && Math.abs(toRow - fromRow) === 2) {
         const midRow = (fromRow + toRow) / 2;
@@ -442,9 +433,8 @@ async function tryMove(fromRow, fromCol, toRow, toCol) {
     return true;
 }
 
-// ==================== AFFICHAGE DES CAPTURES LATÉRALES ====================
+// ==================== AFFICHAGE DES CAPTURES AVEC MULTIPLICATEUR ====================
 function renderCapturedPieces() {
-    // Supprimer les anciennes colonnes
     const oldLeft = document.getElementById('capturedLeft');
     const oldRight = document.getElementById('capturedRight');
     if (oldLeft) oldLeft.remove();
@@ -453,65 +443,60 @@ function renderCapturedPieces() {
     const wrapper = document.getElementById('boardWrapper');
     if (!wrapper) return;
 
-    // Filtrer les captures
-    const whiteCaptured = capturedPieces.filter(p => p.color === 'white'); // prises par les Noirs
-    const blackCaptured = capturedPieces.filter(p => p.color === 'black'); // prises par les Blancs
+    // Compter les pièces par type et couleur
+    const counts = {};
+    capturedPieces.forEach(p => {
+        const key = p.color + '_' + p.piece;
+        counts[key] = (counts[key] || 0) + 1;
+    });
 
-    // === COLONNE GAUCHE : pièces blanches capturées (étiquette "Noirs") ===
-    const leftDiv = document.createElement('div');
-    leftDiv.id = 'capturedLeft';
-    leftDiv.className = 'captured-side';
+    // Fonction pour créer une colonne
+    function createColumn(color, label, sideId) {
+        const div = document.createElement('div');
+        div.id = sideId;
+        div.className = 'captured-side';
 
-    if (whiteCaptured.length > 0) {
-        const label = document.createElement('div');
-        label.className = 'side-label';
-        label.textContent = '♚ Noirs';
-        leftDiv.appendChild(label);
+        const relevant = Object.keys(counts).filter(k => k.startsWith(color + '_'));
+        if (relevant.length > 0) {
+            const labelEl = document.createElement('div');
+            labelEl.className = 'side-label';
+            labelEl.textContent = label;
+            div.appendChild(labelEl);
 
-        whiteCaptured.forEach(p => {
-            const img = document.createElement('img');
-            img.src = pieceImages[`white_${p.piece}`];
-            img.title = `Pièce blanche ${p.piece}`;
-            leftDiv.appendChild(img);
-        });
+            relevant.forEach(key => {
+                const pieceType = key.split('_')[1];
+                const count = counts[key];
+                const item = document.createElement('div');
+                item.className = 'capture-item';
+                const img = document.createElement('img');
+                img.src = pieceImages[`${color}_${pieceType}`];
+                img.title = `Pièce ${color} ${pieceType}`;
+                img.style.width = '32px';
+                img.style.height = '32px';
+                item.appendChild(img);
+                if (count > 1) {
+                    const mult = document.createElement('span');
+                    mult.textContent = '×' + count;
+                    item.appendChild(mult);
+                }
+                div.appendChild(item);
+            });
 
-        const count = document.createElement('div');
-        count.className = 'side-count';
-        count.textContent = `(${whiteCaptured.length})`;
-        leftDiv.appendChild(count);
-    } else {
-        leftDiv.textContent = '♚';
-        leftDiv.style.cssText += 'font-size:1.5rem;opacity:0.3;';
+            const total = relevant.reduce((sum, k) => sum + counts[k], 0);
+            const totalEl = document.createElement('div');
+            totalEl.className = 'side-count';
+            totalEl.textContent = `(${total})`;
+            div.appendChild(totalEl);
+        } else {
+            div.textContent = label === '♚ Noirs' ? '♚' : '♔';
+            div.style.cssText += 'font-size:1.5rem;opacity:0.3;display:flex;align-items:center;justify-content:center;';
+        }
+        return div;
     }
 
-    // === COLONNE DROITE : pièces noires capturées (étiquette "Blancs") ===
-    const rightDiv = document.createElement('div');
-    rightDiv.id = 'capturedRight';
-    rightDiv.className = 'captured-side';
+    const leftDiv = createColumn('white', '♚ Noirs', 'capturedLeft');
+    const rightDiv = createColumn('black', '♔ Blancs', 'capturedRight');
 
-    if (blackCaptured.length > 0) {
-        const label = document.createElement('div');
-        label.className = 'side-label';
-        label.textContent = '♔ Blancs';
-        rightDiv.appendChild(label);
-
-        blackCaptured.forEach(p => {
-            const img = document.createElement('img');
-            img.src = pieceImages[`black_${p.piece}`];
-            img.title = `Pièce noire ${p.piece}`;
-            rightDiv.appendChild(img);
-        });
-
-        const count = document.createElement('div');
-        count.className = 'side-count';
-        count.textContent = `(${blackCaptured.length})`;
-        rightDiv.appendChild(count);
-    } else {
-        rightDiv.textContent = '♔';
-        rightDiv.style.cssText += 'font-size:1.5rem;opacity:0.3;';
-    }
-
-    // Insérer à gauche et à droite du wrapper
     wrapper.insertBefore(leftDiv, wrapper.firstChild);
     wrapper.appendChild(rightDiv);
 }
@@ -612,15 +597,13 @@ function renderBoard() {
     }
     newTable.appendChild(makeLetterRow());
 
-    // Remplacer l'ancienne table dans le wrapper
     if (oldTable) wrapper.replaceChild(newTable, oldTable);
     else wrapper.appendChild(newTable);
 
     addButtonsUnderBoard();
-    renderCapturedPieces();   // ← affichage des captures
+    renderCapturedPieces();
 }
 
-// ==================== BOUTONS ====================
 function addButtonsUnderBoard() {
     const oldContainer = document.getElementById('buttonContainer');
     if (oldContainer) oldContainer.remove();
@@ -692,7 +675,6 @@ function updateStatusMessage() {
     }
 }
 
-// ==================== GESTION DES CLICS ====================
 function onSquareClick(row, col) {
     if (gameOver) return;
     if (selectedRow === null) {
@@ -729,7 +711,6 @@ function onSquareClick(row, col) {
     }
 }
 
-// ==================== INITIALISATION ====================
 function initGame() {
     initBoard();
     renderBoard();
