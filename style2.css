@@ -1,60 +1,98 @@
+/* ===== STYLES GÉNÉRAUX ===== */
 body {
   background-color: white;
-  text-align: center; /* Centre tout le contenu du body */
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  text-align: center; /* Centre tout le texte par défaut */
 }
 
-/* Conteneur des boutons (si utilisé) */
-.boutons {
+/* ===== EN-TÊTE ===== */
+header {
   display: flex;
-  justify-content: center; /* Centre les boutons */
-  gap: 10px;
-  margin: 10px 0;
+  justify-content: space-between;  /* Sépare le lien à gauche et le bouton à droite */
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #f5f0eb;       /* Fond léger pour l'en-tête (optionnel) */
+  border-bottom: 2px solid #ddd;
 }
 
-.noir, .blanc {
-  font-size: 20px;
-  width: 80px;
-  height: 40px;
-  text-align: center;
-  cursor: pointer;
+/* Lien "CLICK ME !!!!!" */
+header a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: deeppink;                /* Couleur par défaut, sera modifiée par JS */
+  text-decoration: none;
 }
 
+header a:hover {
+  text-decoration: underline;
+}
+
+/* ===== BOUTON ===== */
 .noir {
+  font-size: 20px;
+  width: 100px;
+  height: 45px;
   background-color: black;
   color: white;
-  border: 1px solid #333;
+  border: 2px solid #333;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.blanc {
-  background-color: white;
-  color: black;
-  border: 1px solid black;
+.noir:hover {
+  background-color: #333;
 }
 
-/* Bloc principal de texte */
+/* ===== CONTENU PRINCIPAL ===== */
 .left {
-  max-width: 800px;
-  margin: 0 auto;          /* Centre le bloc horizontalement */
+  max-width: 900px;
+  margin: 30px auto;
   padding: 0 20px;
-  text-align: center;      /* Centre le texte à l'intérieur */
 }
 
-/* Force tout le texte à être centré */
-.left h1,
-.left h2,
-.left p,
-.left ul,
-.left li {
-  text-align: center;
+.left h1 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
 }
 
-/* Pour que les puces restent alignées avec le texte centré */
-.left ul {
-  list-style-position: inside;
-  padding-left: 0;
-}
-
-/* Petite marge pour les paragraphes */
 .left p {
-  margin: 10px 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin: 15px 0;
+}
+
+.left .intro-liste {
+  font-size: 1.3rem;
+  margin-top: 30px;
+}
+
+.left ul {
+  list-style-position: inside;   /* Puces alignées avec le texte centré */
+  padding: 0;
+  text-align: center;            /* Centre les éléments de liste */
+}
+
+.left ul li {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 6px;
+}
+
+/* ===== RESPONSIVE (petits écrans) ===== */
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+  .noir {
+    width: 80%;
+    max-width: 200px;
+  }
+  .left h1 {
+    font-size: 1.6rem;
+  }
 }
