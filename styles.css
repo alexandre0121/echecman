@@ -6,7 +6,7 @@ body {
     padding: 20px;
 }
 
-/* Conteneur principal : plateau + colonnes de captures */
+/* Conteneur principal */
 #boardWrapper {
     display: flex;
     align-items: stretch;
@@ -16,7 +16,7 @@ body {
     max-width: fit-content;
 }
 
-/* Colonnes latérales des captures */
+/* Colonnes de captures */
 .captured-side {
     display: flex;
     flex-direction: column;
@@ -50,10 +50,17 @@ body {
     color: #333;
 }
 
-.captured-side .side-count {
-    font-size: 0.8rem;
-    color: #555;
-    margin-top: 2px;
+.captured-side .capture-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 2px 0;
+}
+
+.captured-side .capture-item span {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #222;
 }
 
 /* Plateau */
@@ -75,16 +82,14 @@ th, td {
     background-color: #d1a679;
 }
 
-/* En-tête */
+/* En‑tête : pas de fond, lien à gauche */
 header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     max-width: 700px;
     margin: 0 auto 20px;
     padding: 10px 20px;
-    background: #f5e6d3;
-    border-radius: 12px;
+    /* fond transparent, pas de bordure */
 }
 
 header a {
@@ -93,6 +98,7 @@ header a {
     color: deeppink;
     text-decoration: none;
 }
+
 header a:hover {
     text-decoration: underline;
 }
@@ -117,10 +123,12 @@ header a:hover {
     background-color: #4CAF50;
     color: white;
 }
+
 #buttonContainer button:last-child {
     background-color: #2196F3;
     color: white;
 }
+
 #buttonContainer button:hover {
     opacity: 0.85;
 }

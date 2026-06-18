@@ -359,7 +359,7 @@ function getGameStatus() {
     return { isOver: false, winner: null };
 }
 
-// ==================== PROMOTION ====================
+// ==================== PROMOTION MODALE ====================
 function showPromotionModal(color) {
     return new Promise((resolve) => {
         const overlay = document.createElement('div');
@@ -408,7 +408,9 @@ async function tryMove(fromRow, fromCol, toRow, toCol) {
     const promoRow = (pieceMoving.color === 'white') ? 0 : 7;
     const isPromotion = (pieceMoving.piece === 'pawn' && toRow === promoRow);
     let promotionChoice = 'queen';
-    if (isPromotion) promotionChoice = await showPromotionModal(pieceMoving.color);
+    if (isPromotion) {
+        promotionChoice = await showPromotionModal(pieceMoving.color);
+    }
 
     const success = executeMove(fromRow, fromCol, toRow, toCol, promotionChoice);
     if (!success) return false;
@@ -433,7 +435,7 @@ async function tryMove(fromRow, fromCol, toRow, toCol) {
     return true;
 }
 
-// ==================== AFFICHAGE DES CAPTURES AVEC MULTIPLICATEUR (SANS TOTAL) ====================
+// ==================== AFFICHAGE DES CAPTURES AVEC MULTIPLICATEUR ====================
 function renderCapturedPieces() {
     const oldLeft = document.getElementById('capturedLeft');
     const oldRight = document.getElementById('capturedRight');
@@ -450,7 +452,6 @@ function renderCapturedPieces() {
         counts[key] = (counts[key] || 0) + 1;
     });
 
-    // Fonction pour créer une colonne sans total
     function createColumn(color, label, sideId) {
         const div = document.createElement('div');
         div.id = sideId;
@@ -481,7 +482,6 @@ function renderCapturedPieces() {
                 }
                 div.appendChild(item);
             });
-            // PAS de compteur total
         } else {
             div.textContent = label === '♚ Noirs' ? '♚' : '♔';
             div.style.cssText += 'font-size:1.5rem;opacity:0.3;display:flex;align-items:center;justify-content:center;';
