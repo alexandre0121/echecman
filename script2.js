@@ -13,7 +13,6 @@ function color() {
     btn.style.color = "black";
     btn.textContent = "Noir";
     document.getElementById("click_me").style.color = "yellow";
-    alert("La page change de couleur");
 
     click = click + 1;
   } 
@@ -28,8 +27,6 @@ function color() {
     btn.style.color = "white"; 
     btn.textContent = "Blanc";
     document.getElementById("click_me").style.color = "deeppink";
-
-    alert("La page change de couleur");
 
     click = click + 1;
   }
