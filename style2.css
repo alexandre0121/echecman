@@ -1,4 +1,4 @@
-/* ===== STYLES GÉNÉRAUX ===== */
+/* ===== TOUT CENTRÉ ===== */
 * {
   margin: 0;
   padding: 0;
@@ -7,17 +7,26 @@
 
 html, body {
   height: 100%;
-  background-color: white;
+  background-color: #f0f0f0;
   font-family: sans-serif;
 }
 
 body {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: center;  /* Centre verticalement tout le contenu */
   min-height: 100vh;
   padding: 20px;
+}
+
+/* ===== CONTENEUR PRINCIPAL ===== */
+.container {
+  max-width: 900px;
+  width: 100%;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
 }
 
 /* ===== EN-TÊTE ===== */
@@ -25,12 +34,9 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  max-width: 900px;
-  padding: 15px 30px;
+  padding: 20px 30px;
   background-color: #f5f0eb;
   border-bottom: 2px solid #ddd;
-  border-radius: 10px 10px 0 0;
 }
 
 header a {
@@ -60,16 +66,10 @@ header a:hover {
   background-color: #333;
 }
 
-/* ===== CONTENU PRINCIPAL - CENTRÉ ===== */
+/* ===== CONTENU ===== */
 .left {
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 40px 30px;
+  padding: 40px 40px 50px;
   text-align: center;
-  background-color: white;
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .left h1 {
@@ -104,6 +104,9 @@ header a:hover {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
   header {
     flex-direction: column;
     gap: 10px;
@@ -114,7 +117,7 @@ header a:hover {
     max-width: 200px;
   }
   .left {
-    padding: 20px 15px;
+    padding: 20px;
   }
   .left h1 {
     font-size: 1.6rem;

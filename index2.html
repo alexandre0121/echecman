@@ -7,30 +7,34 @@
     </head>
     <body>
     
-    <header>
-        <a class="a" id="click_me" href="index.html">CLICK ME !!!!!</a>
-        <button class="noir" id="button" onclick="color()">Noir</button>
-    </header>
+    <!-- Tout est dans un seul conteneur centré -->
+    <div class="container">
         
-    <div class="left">
-        <h1><strong>Voici les règles des échecs</strong></h1>
-        
-        <p><i>Les échecs sont un jeu de stratégie qui se joue à deux joueurs sur un plateau appelé échiquier, composé de 64 cases alternant les couleurs claires et foncées. Chaque joueur dispose de 16 pièces : un roi, une dame (ou reine), deux tours, deux fous, deux cavaliers et huit pions. Le but du jeu est de mettre le roi adverse en échec et mat, c'est-à-dire de le menacer de capture sans qu'il puisse s'en échapper.</i></p>
-
-        <h2 class="intro-liste">Chaque pièce se déplace d'une manière particulière :</h2>
-
-        <ul>
-            <li>Le roi avance d'une case dans n'importe quelle direction.</li>
-            <li>La dame se déplace de n'importe quel nombre de cases en ligne droite, horizontalement, verticalement ou en diagonale.</li>
-            <li>La tour avance d'un nombre illimité de cases, mais seulement horizontalement ou verticalement.</li>
-            <li>Le fou se déplace en diagonale sur n'importe quelle distance.</li>
-            <li>Le cavalier se déplace en formant un « L » : deux cases dans une direction, puis une à gauche ou à droite ; il est la seule pièce qui peut sauter par-dessus les autres.</li>
-            <li>Le pion avance d'une case vers l'avant (deux lors de son premier déplacement), mais capture en diagonale. Lorsqu'un pion atteint la dernière rangée, il est promu — généralement en dame.</li>
-        </ul>
+        <header>
+            <a class="a" id="click_me" href="index.html">CLICK ME !!!!!</a>
+            <button class="noir" id="button" onclick="color()">Noir</button>
+        </header>
             
-        <p><i>La partie commence avec les pièces disposées de façon symétrique, la dame sur la case de sa propre couleur. Les joueurs déplacent leurs pièces à tour de rôle, en essayant de contrôler le centre de l'échiquier, de protéger leur roi et d'attaquer celui de l'adversaire. Une partie peut se terminer par échec et mat, pat (match nul lorsque le joueur n'a aucun coup légal sans être en échec), ou d'autres formes de match nul convenues.</i></p>
+        <div class="left">
+            <h1><strong>Voici les règles des échecs</strong></h1>
+            
+            <p><i>Les échecs sont un jeu de stratégie qui se joue à deux joueurs sur un plateau appelé échiquier, composé de 64 cases alternant les couleurs claires et foncées. Chaque joueur dispose de 16 pièces : un roi, une dame (ou reine), deux tours, deux fous, deux cavaliers et huit pions. Le but du jeu est de mettre le roi adverse en échec et mat, c'est-à-dire de le menacer de capture sans qu'il puisse s'en échapper.</i></p>
+
+            <h2 class="intro-liste">Chaque pièce se déplace d'une manière particulière :</h2>
+
+            <ul>
+                <li>Le roi avance d'une case dans n'importe quelle direction.</li>
+                <li>La dame se déplace de n'importe quel nombre de cases en ligne droite, horizontalement, verticalement ou en diagonale.</li>
+                <li>La tour avance d'un nombre illimité de cases, mais seulement horizontalement ou verticalement.</li>
+                <li>Le fou se déplace en diagonale sur n'importe quelle distance.</li>
+                <li>Le cavalier se déplace en formant un « L » : deux cases dans une direction, puis une à gauche ou à droite ; il est la seule pièce qui peut sauter par-dessus les autres.</li>
+                <li>Le pion avance d'une case vers l'avant (deux lors de son premier déplacement), mais capture en diagonale. Lorsqu'un pion atteint la dernière rangée, il est promu — généralement en dame.</li>
+            </ul>
+                
+            <p><i>La partie commence avec les pièces disposées de façon symétrique, la dame sur la case de sa propre couleur. Les joueurs déplacent leurs pièces à tour de rôle, en essayant de contrôler le centre de l'échiquier, de protéger leur roi et d'attaquer celui de l'adversaire. Une partie peut se terminer par échec et mat, pat (match nul lorsque le joueur n'a aucun coup légal sans être en échec), ou d'autres formes de match nul convenues.</i></p>
+        </div>
         
-    </div>
+    </div> <!-- Fin du container -->
 
     <script src="script2.js"></script>
     </body>
